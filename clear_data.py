@@ -10,11 +10,15 @@ Original file is located at
     https://colab.research.google.com/drive/11ZE0N9ZkllCHlBQWYF3i5I3ehm7qgaS1
 """
 
+
+import sys
+
+
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
 
 spark = SparkSession.builder.appName('avto parse').getOrCreate()
-filePath = 'result.csv'
+filePath = sys.argv[1]+'/result.csv'
 
 
 df = spark.read.csv(filePath, inferSchema=True, header=False)
@@ -35,7 +39,7 @@ df.withColumn('engine_capacity',  F.regexp_replace( split_column.getItem(0) , r'
   .withColumnRenamed('_c5', 'color') \
   .withColumnRenamed('_c7', 'production_year') \
   .drop('_c1', '_c6', '_c8') \
-  .write.csv('result_01.csv', header = True)
+  .write.csv(sys.argv[1]+'/result_01.csv', header = True)
 
 
 

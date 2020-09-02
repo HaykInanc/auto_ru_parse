@@ -6,8 +6,8 @@ import os
 from datetime import datetime
 
 
-def __clear_data():
-	subprocess.call(['spark-submit', 'clear_data.py'])
+def __clear_data(path):
+	subprocess.call(['spark-submit', 'clear_data.py', path])
 
 
 def __append_row(path, row):
@@ -51,12 +51,6 @@ def get_data(mark, filePath):
 	url = 'https://auto.ru/moskva/cars/{}/all/?page={}&output_type=list'
 	page_num = 30
 
-	os.chdir('results')
-	dirname = datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
-	os.mkdir(dirname)
-	os.chdir(dirname)
-
-
 
 	while True:
 
@@ -75,6 +69,10 @@ def get_data(mark, filePath):
 
 
 if __name__ == '__main__':
-	get_data('honda', 'result.csv')
-	os.chdir('../../')
-	__clear_data()
+
+	dirname = r'results/' + datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
+	os.mkdir(dirname)
+
+
+	get_data('honda', dirname+'/result.csv')
+	__clear_data(dirname)
