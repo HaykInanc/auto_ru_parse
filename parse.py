@@ -70,9 +70,12 @@ def get_data(mark, filePath):
 
 if __name__ == '__main__':
 
-	dirname = r'results/' + datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
-	os.mkdir(dirname)
+	# dirname = r'results/' + datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
+	# os.mkdir(dirname)
 
 
-	get_data('honda', dirname+'/result.csv')
-	__clear_data(dirname)
+	# get_data('honda', dirname+'/result.csv')
+	# __clear_data(dirname)
+	url = 'https://auto.ru/moskva/cars/{}/all/?page={}&output_type=list'
+	page_num = 30
+	print(__parse_page(url, 'uaz', page_num)[0])
