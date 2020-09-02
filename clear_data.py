@@ -38,6 +38,7 @@ df.withColumn('engine_capacity',  F.regexp_replace( split_column.getItem(0) , r'
   .withColumnRenamed('_c4', 'drive_type') \
   .withColumnRenamed('_c5', 'color') \
   .withColumnRenamed('_c7', 'production_year') \
+  .withColumnRenamed('_c9', 'auto_key') \
   .drop('_c1', '_c6', '_c8') \
   .write.csv(sys.argv[1]+'/result_01.csv', header = True)
 
