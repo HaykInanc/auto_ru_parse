@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def __clear_data(path):
-	subprocess.call(['spark-submit', 'clear_data.py', path], shell=True)
+	subprocess.call(['spark-submit', 'clear_data.py', path])
 
 
 def __append_row(path, row):
