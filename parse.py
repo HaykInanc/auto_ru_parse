@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 def __clear_data(path):
-	subprocess.call(['spark-submit', 'clear_data.py', path])
+	subprocess.call(['spark-submit', 'clear_data.py', path], shell=True)
 
 
 def __append_row(path, row):
@@ -65,8 +65,6 @@ def get_data(mark, filePath):
 		
 		print(str(page_num) + '='*20)
 		page_num += 1
-
-
 
 
 
