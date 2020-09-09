@@ -35,6 +35,28 @@ class DB:
 			);
 			''')
 
+		self.cursor.execute('''
+			create view if not exists v_auto as
+				select 
+					id
+					, auto_key
+					, model
+					, transmission
+					, body_type
+					, drive_type
+					, color
+					, production_year
+					, engine_capacity
+					, horsepower
+					, engine_type
+					, price
+					, milage
+				from auto 
+				where current_timestamp between start_dttm and end_dttm
+
+			;
+			''')
+
 
 	def createTableNewRows(self):
 		# create auto_01
@@ -43,7 +65,7 @@ class DB:
 				select
 					t1.*
 				from auto_00 t1
-				left join auto t2
+				left join v_auto t2
 				on t1.auto_key = t2.auto_key
 				where t2.auto_key is null;
 			''')
@@ -57,7 +79,7 @@ class DB:
 				select 
 					t1.*
 				from auto_00 t1
-				inner join auto t2
+				inner join v_auto t2
 				on t1.auto_key = t2.auto_key
 				and (
 					t1.model              <> t2.model 
@@ -80,7 +102,7 @@ class DB:
 			create table auto_03 as 
 				select
 					t1.auto_key
-				from auto t1
+				from v_auto t1
 				left join auto_00 t2
 				on t1.auto_key = t2.auto_key
 				where t2.auto_key is null;
@@ -186,24 +208,39 @@ class DB:
 
 
 if __name__ == '__main__':
-	fileURL = r'/Users/haykinants/Documents/work/flask/pars/proj_1/auto_ru_parse/results/2020_09_06__21_21_42/result_01.csv/part-00000-9c6b9987-efe7-4418-a88b-b086fac0600e-c000.csv'
+	fileURL = r'data2.csv'
 
 	db = DB()
 	db.deleteTmpTables()
-	db.csv2sql(fileURL) # загрузка данных выгрузки в SQL
-	# db.createAutoTable()
-	# db.createTableNewRows()
-	# db.createTableUpdateRows()
-	# db.createTableDeleteRows()
-	# db.updateAutoTable()
+	db.csv2sql(fileURL)
+	db.createAutoTable()
+	db.createTableNewRows()
+	db.createTableUpdateRows()
+	db.createTableDeleteRows()
+	db.updateAutoTable()
 
 	def readTable(tableName):
 		sql = f'select * from {tableName}'
 		db.cursor.execute(sql)
 		return db.cursor.fetchall()
 
-	for row in readTable('auto'):
+
+	print('_'*10 + 'auto_01' + '_'*10)
+
+	for row in readTable('auto_01'):
 		print(row)
+
+	print('_'*10 + 'auto_02' + '_'*10)
+
+	for row in readTable('auto_02'):
+			print(row)
+
+	print('_'*10 + 'auto_03' + '_'*10)
+
+	for row in readTable('auto_03'):
+		print(row)
+
+
 
 
 
