@@ -113,15 +113,19 @@ class DB:
 		self.cursor.execute('''
 			update auto
 			set end_dttm = current_timestamp
-			where auto_key in (select auto_key from auto_03);
+			where auto_key in (select auto_key from auto_03)
+			and end_dttm = datetime('2999-12-31 23:59:59');
 		''')
 		
 		# изменение записей
 		self.cursor.execute('''
 			update auto
 			set end_dttm = current_timestamp
-			where auto_key in (select auto_key from auto_02);
+			where auto_key in (select auto_key from auto_02)
+			and end_dttm = datetime('2999-12-31 23:59:59');
 		''')
+
+
 
 		self.cursor.execute('''
 			insert into auto (
@@ -208,37 +212,43 @@ class DB:
 
 
 if __name__ == '__main__':
-	fileURL = r'data2.csv'
+	fileURL = r'data3.csv'
 
 	db = DB()
-	db.deleteTmpTables()
-	db.csv2sql(fileURL)
-	db.createAutoTable()
-	db.createTableNewRows()
-	db.createTableUpdateRows()
-	db.createTableDeleteRows()
-	db.updateAutoTable()
+	# db.deleteTmpTables()
+	# db.csv2sql(fileURL)
+	# db.createAutoTable()
+	# db.createTableNewRows()
+	# db.createTableUpdateRows()
+	# db.createTableDeleteRows()
+	# db.updateAutoTable()
 
 	def readTable(tableName):
-		sql = f'select * from {tableName}'
+		sql = f'''select * from {tableName}
+		where auto_key = 1099863620
+		'''
 		db.cursor.execute(sql)
 		return db.cursor.fetchall()
 
 
-	print('_'*10 + 'auto_01' + '_'*10)
-
-	for row in readTable('auto_01'):
+	for row in readTable('auto'):
 		print(row)
 
-	print('_'*10 + 'auto_02' + '_'*10)
 
-	for row in readTable('auto_02'):
-			print(row)
+	# print('_'*10 + 'auto_01' + '_'*10)
 
-	print('_'*10 + 'auto_03' + '_'*10)
+	# for row in readTable('auto_01'):
+	# 	print(row)
 
-	for row in readTable('auto_03'):
-		print(row)
+	# print('_'*10 + 'auto_02' + '_'*10)
+
+	# for row in readTable('auto_02'):
+	# 		print(row)
+
+	# print('_'*10 + 'auto_03' + '_'*10)
+
+	# for row in readTable('auto_03'):
+	# 	print(row)
 
 
 
